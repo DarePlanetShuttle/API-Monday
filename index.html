@@ -11,6 +11,7 @@
             padding: 10px;
             border: 1px solid #ccc;
             background-color: #f9f9f9;
+            white-space: pre-wrap; /* Preserve formatting of JSON */
             display: none; /* Hide the response div initially */
         }
     </style>
@@ -22,14 +23,14 @@
 
     <script>
         document.getElementById('sendRequest').addEventListener('click', function() {
-            fetch('https://a19d5-service-24097847-d2d9fb87.us.monday.app/graphql', {
+            fetch('https://cors-anywhere.herokuapp.com/https://a19d5-service-24097847-d2d9fb87.us.monday.app/graphql', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({})
             })
-            .then(response => response.json()) // Parse response as JSON
+            .then(response => response.json())
             .then(data => {
                 document.getElementById('response').innerText = 'Response from server: ' + JSON.stringify(data, null, 2);
                 document.getElementById('response').style.display = 'block'; // Show the response div
@@ -42,4 +43,3 @@
     </script>
 </body>
 </html>
-
