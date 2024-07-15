@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GitHub Pages Button Example</title>
+</head>
+<body>
+    <h1>Press the button to send a POST request</h1>
+    <button id="sendRequest">Send POST Request</button>
+    <div id="response"></div>
+
+    <script>
+        document.getElementById('sendRequest').addEventListener('click', function() {
+            fetch('https://a19d5-service-24097847-d2d9fb87.us.monday.app/graphql', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('response').innerText = 'Response from server: ' + data;
+            })
+            .catch(error => {
+                document.getElementById('response').innerText = 'Error: ' + error;
+            });
+        });
+    </script>
+</body>
+</html>
