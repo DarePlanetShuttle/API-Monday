@@ -23,7 +23,7 @@
 
     <script>
         document.getElementById('sendRequest').addEventListener('click', function() {
-            fetch('https://a19d5-service-24097847-d2d9fb87.us.monday.app/create_board', {
+            fetch('http://your-flask-app-url/create_board', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -33,9 +33,9 @@
                     board_name: 'new_insertion' // Hardcoded board name
                 })
             })
-            .then(response => response.json())
+            .then(response => response.text()) // Use .text() instead of .json() because allorigins returns raw data
             .then(data => {
-                document.getElementById('response').innerText = 'Response from server: ' + JSON.stringify(data, null, 2);
+                document.getElementById('response').innerText = 'Response from server: ' + data;
                 document.getElementById('response').style.display = 'block'; // Show the response div
             })
             .catch(error => {
