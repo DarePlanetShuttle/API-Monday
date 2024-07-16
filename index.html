@@ -27,8 +27,8 @@
             fetch('output.json')
                 .then(response => response.json())
                 .then(data => {
-                    // Send the JSON data to the Flask app using AllOrigins proxy
-                    fetch('https://api.allorigins.win/raw?url=https://a19d5-service-24097847-d2d9fb87.us.monday.app/recreate_data', {
+                    // Send the JSON data to the Flask app directly
+                    fetch('https://a19d5-service-24097847-d2d9fb87.us.monday.app/recreate_data', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -36,9 +36,14 @@
                         },
                         body: JSON.stringify(data)
                     })
-                    .then(response => response.text()) // Use .text() instead of .json() because allorigins returns raw data
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        return response.json();
+                    })
                     .then(data => {
-                        document.getElementById('response').innerText = 'Response from server: ' + data;
+                        document.getElementById('response').innerText = 'Response from server: ' + JSON.stringify(data, null, 2);
                         document.getElementById('response').style.display = 'block'; // Show the response div
                     })
                     .catch(error => {
