@@ -17,31 +17,38 @@
     </style>
 </head>
 <body>
-    <h1>Press the button to create a new board</h1>
-    <button id="sendRequest">Create Board</button>
+    <h1>Press the button to recreate data from JSON</h1>
+    <button id="sendRequest">Recreate Data</button>
     <div id="response"></div>
 
     <script>
         document.getElementById('sendRequest').addEventListener('click', function() {
-            fetch('http://your-flask-app-url/create_board', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    workspace_id: 2185821, // Hardcoded workspace ID
-                    board_name: 'new_insertion' // Hardcoded board name
+            // Fetch the output.json file
+            fetch('output.json')
+                .then(response => response.json())
+                .then(data => {
+                    // Send the JSON data to the Flask app
+                    fetch('https://a19d5-service-24097847-d2d9fb87.us.monday.app/recreate_data', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('response').innerText = 'Response from server: ' + JSON.stringify(data, null, 2);
+                        document.getElementById('response').style.display = 'block'; // Show the response div
+                    })
+                    .catch(error => {
+                        document.getElementById('response').innerText = 'Error: ' + error;
+                        document.getElementById('response').style.display = 'block'; // Show the response div
+                    });
                 })
-            })
-            .then(response => response.text()) // Use .text() instead of .json() because allorigins returns raw data
-            .then(data => {
-                document.getElementById('response').innerText = 'Response from server: ' + data;
-                document.getElementById('response').style.display = 'block'; // Show the response div
-            })
-            .catch(error => {
-                document.getElementById('response').innerText = 'Error: ' + error;
-                document.getElementById('response').style.display = 'block'; // Show the response div
-            });
+                .catch(error => {
+                    document.getElementById('response').innerText = 'Error fetching JSON: ' + error;
+                    document.getElementById('response').style.display = 'block'; // Show the response div
+                });
         });
     </script>
 </body>
