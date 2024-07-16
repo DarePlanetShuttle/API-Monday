@@ -36,7 +36,8 @@
                     fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent('https://a19d5-service-24097847-d2d9fb87.us.monday.app/recreate_data'), {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
                         },
                         body: JSON.stringify(data)
                     })
