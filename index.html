@@ -32,20 +32,21 @@
                     return response.json();
                 })
                 .then(data => {
-                    // Send the JSON data to the Flask app using AllOrigins proxy
-                    fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent('https://a19d5-service-24097847-d2d9fb87.us.monday.app/recreate_data'), {
+                    // Attempt to send the JSON data to the Flask app directly
+                    fetch('https://a19d5-service-24097847-d2d9fb87.us.monday.app/recreate_data', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             'Accept': 'application/json'
                         },
-                        body: JSON.stringify(data)
+                        body: JSON.stringify(data),
+                        mode: 'no-cors' // Attempt to bypass CORS
                     })
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Network response was not ok ' + response.statusText);
                         }
-                        return response.text(); // Use .text() instead of .json() because allorigins returns raw data
+                        return response.text(); // Expecting raw text response
                     })
                     .then(data => {
                         document.getElementById('response').innerText = 'Response from server: ' + data;
