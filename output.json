@@ -1,0 +1,177 @@
+[
+    {
+        "workspace_id": "2309392",
+        "workspace_name": "new_repo",
+        "boards": [
+            {
+                "id": "1557856683",
+                "name": "Contactos",
+                "groups": [
+                    {
+                        "id": "topics",
+                        "title": "Contactos activos"
+                    },
+                    {
+                        "id": "new_group",
+                        "title": "Contactos inactivos"
+                    }
+                ],
+                "columns": [
+                    {
+                        "id": "name",
+                        "title": "Nombre",
+                        "type": "name"
+                    },
+                    {
+                        "id": "subelementos",
+                        "title": "Subelementos",
+                        "type": "subtasks"
+                    },
+                    {
+                        "id": "status",
+                        "title": "Tipo",
+                        "type": "status"
+                    },
+                    {
+                        "id": "contact_account",
+                        "title": "Cuentas",
+                        "type": "board_relation"
+                    },
+                    {
+                        "id": "status5",
+                        "title": "Prioridad",
+                        "type": "status"
+                    },
+                    {
+                        "id": "texto",
+                        "title": "Puesto",
+                        "type": "text"
+                    },
+                    {
+                        "id": "contact_phone",
+                        "title": "Tel\u00e9fono",
+                        "type": "phone"
+                    },
+                    {
+                        "id": "contact_email",
+                        "title": "E-mail",
+                        "type": "email"
+                    },
+                    {
+                        "id": "mirror2",
+                        "title": "Valor del acuerdo",
+                        "type": "mirror"
+                    },
+                    {
+                        "id": "long_text4",
+                        "title": "Comentarios",
+                        "type": "long_text"
+                    }
+                ]
+            },
+            {
+                "id": "1557856703",
+                "name": "Cuentas",
+                "groups": [
+                    {
+                        "id": "topics",
+                        "title": "Empresas"
+                    }
+                ],
+                "columns": [
+                    {
+                        "id": "name",
+                        "title": "Nombre",
+                        "type": "name"
+                    },
+                    {
+                        "id": "company_domain",
+                        "title": "Dominio",
+                        "type": "link"
+                    },
+                    {
+                        "id": "account_contact",
+                        "title": "Contactos",
+                        "type": "board_relation"
+                    },
+                    {
+                        "id": "status5",
+                        "title": "Prioridad",
+                        "type": "status"
+                    },
+                    {
+                        "id": "industry",
+                        "title": "Sector",
+                        "type": "dropdown"
+                    },
+                    {
+                        "id": "company_description",
+                        "title": "Descripci\u00f3n",
+                        "type": "long_text"
+                    },
+                    {
+                        "id": "employee_count",
+                        "title": "Cant. de empleados",
+                        "type": "text"
+                    },
+                    {
+                        "id": "headquarters_loc",
+                        "title": "Ubicaci\u00f3n de la sede central",
+                        "type": "text"
+                    },
+                    {
+                        "id": "texto1",
+                        "title": "Perfil de la empresa",
+                        "type": "text"
+                    },
+                    {
+                        "id": "board_relation",
+                        "title": "link to Client Projects",
+                        "type": "board_relation"
+                    }
+                ]
+            },
+            {
+                "id": "1557860642",
+                "name": "Oferta",
+                "groups": [
+                    {
+                        "id": "topics",
+                        "title": "Abiertas"
+                    },
+                    {
+                        "id": "group_title",
+                        "title": "Cerradas"
+                    }
+                ],
+                "columns": [
+                    {
+                        "id": "name",
+                        "title": "Name",
+                        "type": "name"
+                    },
+                    {
+                        "id": "subelementos__1",
+                        "title": "Subelementos",
+                        "type": "subtasks"
+                    },
+                    {
+                        "id": "person",
+                        "title": "Persona",
+                        "type": "people"
+                    },
+                    {
+                        "id": "status",
+                        "title": "Estado",
+                        "type": "status"
+                    },
+                    {
+                        "id": "date",
+                        "title": "Fecha",
+                        "type": "date"
+                    }
+                ]
+            }
+        ]
+    }
+]
