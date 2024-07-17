@@ -23,14 +23,21 @@
 
     <script>
         document.getElementById('sendRequest').addEventListener('click', function() {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 seconds timeout
+
             fetch('https://api.allorigins.win/raw?url=https://a19d5-service-24097847-d2d9fb87.us.monday.app/graphql', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({})
+                body: JSON.stringify({}),
+                signal: controller.signal
             })
-            .then(response => response.text()) // Use .text() instead of .json() because allorigins returns raw data
+            .then(response => {
+                clearTimeout(timeoutId);
+                return response.text(); // Use .text() instead of .json() because allorigins returns raw data
+            })
             .then(data => {
                 document.getElementById('response').innerText = 'Response from server: ' + data;
                 document.getElementById('response').style.display = 'block'; // Show the response div
@@ -48,7 +55,11 @@
                 document.body.removeChild(a);
             })
             .catch(error => {
-                document.getElementById('response').innerText = 'Error: ' + error;
+                if (error.name === 'AbortError') {
+                    document.getElementById('response').innerText = 'Error: Request Timeout';
+                } else {
+                    document.getElementById('response').innerText = 'Error: ' + error;
+                }
                 document.getElementById('response').style.display = 'block'; // Show the response div
             });
         });
