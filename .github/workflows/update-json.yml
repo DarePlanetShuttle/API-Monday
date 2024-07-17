@@ -1,0 +1,32 @@
+name: Update JSON File
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [update-json]
+
+jobs:
+  update-json-file:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Fetch data from external API
+      run: |
+        curl -X POST -H "Content-Type: application/json" -d '{}' https://api.allorigins.win/raw?url=https://a19d5-service-24097847-d2d9fb87.us.monday.app/graphql -o data.json
+
+    - name: Add new JSON file
+      run: |
+        mv data.json backup.json
+
+    - name: Commit changes
+      run: |
+        git config --global user.name 'github-actions'
+        git config --global user.email 'github-actions@github.com'
+        git add backup.json
+        git commit -m 'Update backup.json with new data'
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
