@@ -17,8 +17,8 @@
     </style>
 </head>
 <body>
-    <h1>Press the button to send a POST request and update GitHub</h1>
-    <button id="sendRequest">Send POST Request</button>
+    <h1>Press the button to fetch data and download as JSON</h1>
+    <button id="sendRequest">Fetch Data</button>
     <div id="response"></div>
 
     <script>
@@ -35,49 +35,17 @@
                 document.getElementById('response').innerText = 'Response from server: ' + data;
                 document.getElementById('response').style.display = 'block'; // Show the response div
 
-                // Now let's update the GitHub file
-                const token = 'YOUR_GITHUB_PERSONAL_ACCESS_TOKEN';
-                const repo = 'DarePlanetShuttle/API-Monday';
-                const path = 'backup.json';
-                const message = 'Update backup.json with new data';
-                
-                // Get the current content of the file to obtain the SHA
-                fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `token ${token}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
-                })
-                .then(response => response.json())
-                .then(fileData => {
-                    const sha = fileData.sha;
+                // Create a blob from the JSON data
+                const blob = new Blob([data], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
 
-                    // Update the file with new content
-                    fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Authorization': `token ${token}`,
-                            'Accept': 'application/vnd.github.v3+json',
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            message: message,
-                            content: btoa(data), // base64 encode the new content
-                            sha: sha
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(updateResponse => {
-                        document.getElementById('response').innerText += '\nGitHub update response: ' + JSON.stringify(updateResponse, null, 2);
-                    })
-                    .catch(error => {
-                        document.getElementById('response').innerText += '\nGitHub update error: ' + error;
-                    });
-                })
-                .catch(error => {
-                    document.getElementById('response').innerText += '\nGitHub fetch error: ' + error;
-                });
+                // Create a link element to download the blob as a file
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'backup.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
             })
             .catch(error => {
                 document.getElementById('response').innerText = 'Error: ' + error;
