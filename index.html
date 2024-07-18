@@ -17,8 +17,8 @@
     </style>
 </head>
 <body>
-    <h1>Press the button to send a POST request</h1>
-    <button id="sendRequest">Get data</button>
+    <h1>Press the button to fetch data and download as JSON</h1>
+    <button id="sendRequest">Send POST Request</button>
     <div id="response"></div>
 
     <script>
@@ -30,10 +30,28 @@
                 },
                 body: JSON.stringify({})
             })
-            .then(response => response.text()) // Use .text() instead of .json() because allorigins returns raw data
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            })
             .then(data => {
-                document.getElementById('response').innerText = 'Response from server: ' + data;
+                document.getElementById('response').innerText = 'Response from server: Data fetched successfully';
                 document.getElementById('response').style.display = 'block'; // Show the response div
+
+                // Create a blob from the JSON data
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+
+                // Create a link element to download the blob as a file
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'data.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
             })
             .catch(error => {
                 document.getElementById('response').innerText = 'Error: ' + error;
