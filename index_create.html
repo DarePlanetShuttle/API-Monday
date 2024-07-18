@@ -18,43 +18,48 @@
 </head>
 <body>
     <h1>Press the button to fetch data and download as JSON</h1>
-    <button id="sendRequest">Send POST Request</button>
+    <button id="sendRequest">Fetch Data</button>
     <div id="response"></div>
 
     <script>
         document.getElementById('sendRequest').addEventListener('click', function() {
-            fetch('/graphql', {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 seconds timeout
+
+            fetch('https://api.allorigins.win/raw?url=https://a19d5-service-24097847-d2d9fb87.us.monday.app/graphql', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({})
+                body: JSON.stringify({}),
+                signal: controller.signal
             })
             .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Network response was not ok');
-                }
+                clearTimeout(timeoutId);
+                return response.text(); // Use .text() instead of .json() because allorigins returns raw data
             })
             .then(data => {
-                document.getElementById('response').innerText = 'Response from server: Data fetched successfully';
+                document.getElementById('response').innerText = 'Response from server: ' + data;
                 document.getElementById('response').style.display = 'block'; // Show the response div
 
                 // Create a blob from the JSON data
-                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const blob = new Blob([data], { type: 'application/json' });
                 const url = URL.createObjectURL(blob);
 
                 // Create a link element to download the blob as a file
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = 'data.json';
+                a.download = 'backup.json';
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
             })
             .catch(error => {
-                document.getElementById('response').innerText = 'Error: ' + error;
+                if (error.name === 'AbortError') {
+                    document.getElementById('response').innerText = 'Error: Request Timeout';
+                } else {
+                    document.getElementById('response').innerText = 'Error: ' + error;
+                }
                 document.getElementById('response').style.display = 'block'; // Show the response div
             });
         });
