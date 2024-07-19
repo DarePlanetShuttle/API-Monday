@@ -22,7 +22,7 @@
     <div id="response"></div>
 
     <script>
-        async function fetchWithTimeout(resource, options = {}, timeout = 60000) {
+        async function fetchWithTimeout(resource, options = {}, timeout = 200000) {
             const { signal, timeoutId } = createTimeoutSignal(timeout);
             const controller = new AbortController();
             options.signal = signal;
