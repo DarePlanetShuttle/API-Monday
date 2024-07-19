@@ -17,45 +17,49 @@
     </style>
 </head>
 <body>
-    <h1>Press the button to fetch data and download as JSON</h1>
+    <h1>Press the button to send a POST request</h1>
     <button id="sendRequest">Send POST Request</button>
     <div id="response"></div>
 
     <script>
+        async function fetchWithTimeout(resource, options = {}, timeout = 60000) {
+            const { signal, timeoutId } = createTimeoutSignal(timeout);
+            const controller = new AbortController();
+            options.signal = signal;
+            options.signal.addEventListener('abort', () => controller.abort());
+
+            try {
+                const response = await fetch(resource, options);
+                clearTimeout(timeoutId);
+                return response;
+            } catch (error) {
+                clearTimeout(timeoutId);
+                throw error;
+            }
+        }
+
+        function createTimeoutSignal(timeout) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), timeout);
+            return { signal: controller.signal, timeoutId };
+        }
+
         document.getElementById('sendRequest').addEventListener('click', function() {
-            fetch('https://api.allorigins.win/raw?url=https://a19d5-service-24097847-d2d9fb87.us.monday.app/graphql', {
+            fetchWithTimeout('https://api.allorigins.win/raw?url=https://a19d5-service-24097847-d2d9fb87.us.monday.app/graphql', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({})
             })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Network response was not ok');
-                }
-            })
+            .then(response => response.text())
             .then(data => {
-                document.getElementById('response').innerText = 'Response from server: Data fetched successfully';
-                document.getElementById('response').style.display = 'block'; // Show the response div
-
-                // Create a blob from the JSON data
-                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-
-                // Create a link element to download the blob as a file
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'data.json';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
+                document.getElementById('response').innerText = 'Response from server: ' + data;
+                document.getElementById('response').style.display = 'block';
             })
             .catch(error => {
                 document.getElementById('response').innerText = 'Error: ' + error;
-                document.getElementById('response').style.display = 'block'; // Show the response div
+                document.getElementById('response').style.display = 'block';
             });
         });
     </script>
